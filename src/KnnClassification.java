@@ -15,7 +15,7 @@ public class KnnClassification {
         return Math.sqrt(sum);
     }
 
-    public IrysEnum classify(Irys irysTest, List<Irys> irysList, int k) {
+    public IrysEnum classify(Irys irysTest, List<Irys> irysList, int k, boolean show) {
 
         List<Irys> irysListCopy = new ArrayList<>(irysList);
 
@@ -25,10 +25,12 @@ public class KnnClassification {
             return Double.compare(distance1, distance2);
         });
 
-//        for (int i = 0; i < k; i++) {
-//            System.out.println(irysListCopy.get(i));
-//            System.out.println("Distance: " + distance(irysListCopy.get(i), irysTest));
-//        }
+        if (show) {
+            for (int i = 0; i < k; i++) {
+                System.out.println(irysListCopy.get(i));
+                System.out.println("Distance: " + Math.round(distance(irysListCopy.get(i), irysTest) * 1000) / 1000.0);
+            }
+        }
 
         Map<IrysEnum, Integer> map = new HashMap<>();
         for (int i = 0; i < k; i++) {
@@ -54,7 +56,7 @@ public class KnnClassification {
     public double accuracy(List<Irys> irysList, List<Irys> irysListTest, int k) {
         int correct = 0;
         for (Irys irys : irysListTest) {
-            IrysEnum name = classify(irys, irysList, k);
+            IrysEnum name = classify(irys, irysList, k, false);
             if (name == irys.getName()) {
                 correct++;
             }else {
